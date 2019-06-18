@@ -1,23 +1,39 @@
 import org.scalatest.{FunSpec, Matchers}
 
 class QueueSpec extends FunSpec with Matchers {
+  val emptyQueue: Queue[Int] = Queue.empty[Int]
   describe("An empty Queue:") {
     it("isEmpty should return true") {
-      Queue.empty[Int].isEmpty shouldBe true
+      emptyQueue.isEmpty shouldBe true
+    }
+    it("enQueue(element) should return a non-empty Queue") {
+      emptyQueue.enQueue(1).isEmpty shouldBe false
+    }
+    it("deQueue should return another empty Queue") {
+      emptyQueue.deQueue().isEmpty shouldBe true
     }
     it("head should return None") {
-      Queue.empty[Int].head shouldBe None
+      emptyQueue.head shouldBe None
     }
   }
 
   describe("An non-empty Queue:") {
-    val onlyElement: Int = 1
-    val nonEmptyQueue = Queue.empty[Int].enQueue(onlyElement)
+    val originalHeadElement: Int = 1
+    val otherElement: Int = 2
+    val nonEmptyQueue = emptyQueue.enQueue(originalHeadElement)
     it("isEmpty should return false") {
       nonEmptyQueue.isEmpty shouldBe false
     }
+    it("enQueue(otherElement) to a non-empty Queue, will not have otherElement as head") {
+      nonEmptyQueue.enQueue(otherElement).head.contains(otherElement) shouldBe false
+      nonEmptyQueue.enQueue(otherElement).head.contains(originalHeadElement) shouldBe true
+    }
+    it("deQueue will return a Queue without the head element") {
+      nonEmptyQueue.head.contains(originalHeadElement) shouldBe true
+      nonEmptyQueue.deQueue().head.contains(originalHeadElement) shouldBe false
+    }
     it("head should return the element at the beginning of the queue") {
-      nonEmptyQueue.head shouldBe Some(onlyElement)
+      nonEmptyQueue.head shouldBe Some(originalHeadElement)
     }
   }
 
@@ -45,10 +61,10 @@ class QueueSpec extends FunSpec with Matchers {
     }
   }
 
-  describe("A Queue should behave as expected") {
-    val testElements = Vector(1, 2, 3, 4, 5)
-    val testQueue = Queue.empty[Int]
-    it("enQueuing and deQueuing items should maintain FIFO order") {
-    }
-  }
+//  describe("A Queue should behave as expected") {
+//    val testElements = Vector(1, 2, 3, 4, 5)
+//    val testQueue = Queue.empty[Int]
+//    it("enQueuing and deQueuing items should maintain FIFO order") {
+//    }
+//  }
 }
